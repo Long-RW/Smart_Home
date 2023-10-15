@@ -1,5 +1,4 @@
 Record=TopLevelDocument|FileName=Diagram.SchDoc
 Record=SheetSymbol|SourceDocument=Diagram.SchDoc|Designator=ESP32|SchDesignator=ESP32|FileName=ESP32.SchDoc|SymbolType=Normal|RawFileName=ESP32.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
 Record=SheetSymbol|SourceDocument=Diagram.SchDoc|Designator=LED_CONTROL|SchDesignator=LED_CONTROL|FileName=Led_Control.SchDoc|SymbolType=Normal|RawFileName=Led_Control.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
-Record=SheetSymbol|SourceDocument=Diagram.SchDoc|Designator=Power_Suply|SchDesignator=Power_Suply|FileName=Power_Suply.SchDoc|SymbolType=Normal|RawFileName=Power_Suply.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
 Record=SheetSymbol|SourceDocument=Diagram.SchDoc|Designator=STM32|SchDesignator=STM32|FileName=STM32.SchDoc|SymbolType=Normal|RawFileName=STM32.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
