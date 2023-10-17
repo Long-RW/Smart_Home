@@ -1,0 +1,37 @@
+Change Component Designator: OldDesignator=BOOT NewDesignator=S2
+Change Component Designator: OldDesignator=EN NewDesignator=S1
+Added Component: Designator=C8(JP4-D1C)
+Add component (AddParameter): Name = "ComponentLink1 Description"; Value = "Manufacturer"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "http://www.we-online.com"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2 Description"; Value = "Datasheet"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2URL"; Value = "http://katalog.we-online.de/em/datasheet/6130xx143121.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Created by"; Value = "Karrer Zheng"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Created Date"; Value = "29 March 2013"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "W¨¹rth Elektronik eiSos GmbH"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "NoPins"; Value = "04"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "partNo"; Value = "613004143121"; VariantName = "[No Variations]"
+Added Component: Designator=C9(JP4-D1C)
+Add component (AddParameter): Name = "ComponentLink1 Description"; Value = "Manufacturer"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "http://www.we-online.com"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2 Description"; Value = "Datasheet"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2URL"; Value = "http://katalog.we-online.de/em/datasheet/6130xx143121.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Created by"; Value = "Karrer Zheng"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Created Date"; Value = "29 March 2013"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "W¨¹rth Elektronik eiSos GmbH"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "NoPins"; Value = "04"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "partNo"; Value = "613004143121"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GAS_DI Pin=C8-1
+Added Pin To Net: NetName=GAS_AI Pin=C8-2
+Added Pin To Net: NetName=GND Pin=C8-3
+Added Pin To Net: NetName=+3.3VDC Pin=C8-4
+Added Pin To Net: NetName=RAIN_DI Pin=C9-1
+Added Pin To Net: NetName=RAIN_AI Pin=C9-2
+Added Pin To Net: NetName=GND Pin=C9-3
+Added Pin To Net: NetName=+3.3VDC Pin=C9-4
+Added Member To Class: ClassName=STM32 Member=Component C8 JP4
+Added Member To Class: ClassName=STM32 Member=Component C9 JP4
+Added Member To Class: ClassName=ESP32 Member=Component S1 SW-SMD
+Added Member To Class: ClassName=ESP32 Member=Component S2 SW-SMD
+Added Room: Name=ESP32
+Added Room: Name=LED_CONTROL
+Added Room: Name=STM32
