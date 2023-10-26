@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [SmartHome.PrjPCB]
+   Generated File[SmartHome.TXT]
+   Generated File[SmartHome.LDP]
+   Generated File[SmartHome.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 12:01:57 PM On 20-Oct-23
