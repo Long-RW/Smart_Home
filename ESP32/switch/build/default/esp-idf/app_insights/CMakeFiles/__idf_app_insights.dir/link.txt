@@ -1,0 +1,2 @@
+C:\Espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\bin\xtensa-esp32-elf-ar.exe qc libapp_insights.a CMakeFiles/__idf_app_insights.dir/app_insights.c.obj
+C:\Espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\bin\xtensa-esp32-elf-ranlib.exe libapp_insights.a

@@ -1,0 +1,8 @@
+{
+    "idf.adapterTargetName": "esp32",
+    "idf.portWin": "COM6",
+    "cmake.configureOnOpen": true,
+    "terminal.integrated.allowMnemonics": true,
+    "C_Cpp.errorSquiggles": "enabled",
+    "idf.flashType": "UART"
+}

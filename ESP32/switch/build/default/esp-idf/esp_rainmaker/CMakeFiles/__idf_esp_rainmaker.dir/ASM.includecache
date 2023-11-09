@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/esp-rainmaker/examples/switch/build/default/rmaker_claim_service_server.crt.S
+
+C:/esp-rainmaker/examples/switch/build/default/rmaker_mqtt_server.crt.S
+
+C:/esp-rainmaker/examples/switch/build/default/rmaker_ota_server.crt.S
+

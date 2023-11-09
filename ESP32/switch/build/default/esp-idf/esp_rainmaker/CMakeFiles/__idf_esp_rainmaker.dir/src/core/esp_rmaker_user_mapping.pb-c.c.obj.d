@@ -1,0 +1,35 @@
+esp-idf/esp_rainmaker/CMakeFiles/__idf_esp_rainmaker.dir/src/core/esp_rmaker_user_mapping.pb-c.c.obj: \
+ C:\esp-rainmaker\components\esp_rainmaker\src\core\esp_rmaker_user_mapping.pb-c.c \
+ C:\esp-rainmaker\components\esp_rainmaker\src\core\esp_rmaker_user_mapping.pb-c.h \
+ C:\Espressif\esp-idf-v5.0.4\components\protobuf-c\protobuf-c/protobuf-c/protobuf-c.h \
+ C:\Espressif\esp-idf-v5.0.4\components\newlib\platform_include/assert.h \
+ C:\esp-rainmaker\examples\switch\build\default\config/sdkconfig.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\stdlib.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\machine\ieeefp.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\_ansi.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\newlib.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\_newlib_version.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\sys\config.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\sys\features.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\lib\gcc\xtensa-esp32-elf\11.2.0\include\stddef.h \
+ C:\Espressif\esp-idf-v5.0.4\components\newlib\platform_include/sys/reent.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\sys\reent.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\_ansi.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\sys\_types.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\machine\_types.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\machine\_default_types.h \
+ C:\Espressif\esp-idf-v5.0.4\components\newlib\platform_include/sys/lock.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\sys\lock.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\sys\cdefs.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\machine\stdlib.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\alloca.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\sys\_locale.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\lib\gcc\xtensa-esp32-elf\11.2.0\include\stdint.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\stdint.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\sys\_intsup.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\sys\_stdint.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\assert.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\lib\gcc\xtensa-esp32-elf\11.2.0\include-fixed\limits.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\lib\gcc\xtensa-esp32-elf\11.2.0\include-fixed\syslimits.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\limits.h \
+ c:\espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\xtensa-esp32-elf\sys-include\sys\syslimits.h

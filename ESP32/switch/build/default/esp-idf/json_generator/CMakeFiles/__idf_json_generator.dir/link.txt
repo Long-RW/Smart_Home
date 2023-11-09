@@ -1,0 +1,2 @@
+C:\Espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\bin\xtensa-esp32-elf-ar.exe qc libjson_generator.a CMakeFiles/__idf_json_generator.dir/src/json_generator.c.obj
+C:\Espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\bin\xtensa-esp32-elf-ranlib.exe libjson_generator.a
