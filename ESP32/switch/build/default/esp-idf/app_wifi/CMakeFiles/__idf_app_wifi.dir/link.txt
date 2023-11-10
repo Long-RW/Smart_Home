@@ -1,2 +1,0 @@
-C:\Espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\bin\xtensa-esp32-elf-ar.exe qc libapp_wifi.a CMakeFiles/__idf_app_wifi.dir/app_wifi.c.obj
-C:\Espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\bin\xtensa-esp32-elf-ranlib.exe libapp_wifi.a

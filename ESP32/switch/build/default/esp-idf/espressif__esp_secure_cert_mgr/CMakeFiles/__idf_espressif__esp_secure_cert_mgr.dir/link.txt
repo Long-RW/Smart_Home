@@ -1,2 +1,0 @@
-C:\Espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\bin\xtensa-esp32-elf-ar.exe qc libespressif__esp_secure_cert_mgr.a CMakeFiles/__idf_espressif__esp_secure_cert_mgr.dir/srcs/esp_secure_cert_tlv_read.c.obj CMakeFiles/__idf_espressif__esp_secure_cert_mgr.dir/srcs/esp_secure_cert_crypto.c.obj
-C:\Espressif\tools\xtensa-esp32-elf\esp-2022r1-11.2.0\xtensa-esp32-elf\bin\xtensa-esp32-elf-ranlib.exe libespressif__esp_secure_cert_mgr.a

@@ -1,0 +1,4 @@
+-- IDF_TARGET not set, using default target: esp32
+-- Found Git: C:/Espressif/tools/idf-git/2.39.2/cmd/git.exe (found version "2.39.2.windows.1") 
+-- Component directory C:/Espressif/frameworks/esp-idf-v5.0.4/components/esp-insights does not contain a CMakeLists.txt file. No component will be added
+-- Configuring incomplete, errors occurred!

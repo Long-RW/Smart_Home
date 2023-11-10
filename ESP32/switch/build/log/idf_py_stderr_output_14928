@@ -1,0 +1,8 @@
+CMake Error at C:/Espressif/frameworks/esp-idf-v5.0.4/tools/cmake/project.cmake:326 (message):
+  Directory specified in EXTRA_COMPONENT_DIRS doesn't exist:
+  D:/SmartHome/Smart_Home/components/esp-insights/components
+Call Stack (most recent call first):
+  C:/Espressif/frameworks/esp-idf-v5.0.4/tools/cmake/project.cmake:410 (__project_init)
+  CMakeLists.txt:16 (project)
+
+
