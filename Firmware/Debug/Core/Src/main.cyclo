@@ -1,0 +1,11 @@
+../Core/Src/main.c:104:6:HAL_UART_RxCpltCallback	3
+../Core/Src/main.c:126:5:main	1
+../Core/Src/main.c:174:6:SystemClock_Config	3
+../Core/Src/main.c:211:13:MX_TIM4_Init	7
+../Core/Src/main.c:272:13:MX_USART1_UART_Init	2
+../Core/Src/main.c:305:13:MX_GPIO_Init	1
+../Core/Src/main.c:360:6:process_rx_data	12
+../Core/Src/main.c:417:6:process_control	1
+../Core/Src/main.c:421:6:process_led_control	1
+../Core/Src/main.c:430:6:process_measure	1
+../Core/Src/main.c:439:6:Error_Handler	1

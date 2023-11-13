@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "cJSON.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -31,7 +31,41 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+typedef enum MSG_TYPE_t MSG_TYPE;
+enum MSG_TYPE_t{
+	MSG_LED_1 = 1,
+	MSG_LED_2,
+	MSG_LED_3,
+	MSG_LED_4,
+	MSG_LED_5,
+	MSG_LED_6,
+	MSG_MOTOR_1,
+	MSG_MOTOR_2,
+	MSG_MOTOR_3,
+	MSG_MOTOR_4,
+	MSG_MOTOR_5
+};
 
+typedef struct GAS_SENSOR_t GAS_SENSOR;
+struct GAS_SENSOR_t{
+	float voltage;
+	uint8_t state;
+};
+typedef struct SMH_APP_t SMH_APP;
+struct SMH_APP_t{
+	GAS_SENSOR gas_sensor;
+	uint8_t led1_state;
+	uint8_t led2_state;
+	uint8_t led3_state;
+	uint8_t led4_state;
+	uint8_t led5_state;
+	uint8_t led6_state;
+	uint8_t motor1_state;
+	uint8_t motor2_state;
+	uint8_t motor3_state;
+	uint8_t motor4_state;
+	uint8_t motor5_state;
+};
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -40,30 +74,48 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-ADC_HandleTypeDef hadc1;
-ADC_HandleTypeDef hadc2;
-
 TIM_HandleTypeDef htim4;
 
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-
+SMH_APP main_app;
+uint8_t uart_rx_buff[30];
+uint8_t _rxIndex = 0;
+uint8_t rx_data;
+uint8_t tx_complete_flag = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
-static void MX_ADC1_Init(void);
-static void MX_ADC2_Init(void);
 static void MX_TIM4_Init(void);
 /* USER CODE BEGIN PFP */
-
+void process_rx_data();
+void process_led_control();
+void process_motor_control();
+void process_measure();
+void process_control();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  /* Prevent unused argument(s) compilation warning */
+  if(huart->Instance == USART1){
+	  uart_rx_buff[_rxIndex++] = rx_data;
+	  if(rx_data == '}'){
+		  _rxIndex = 0;
+		  tx_complete_flag = 1;
+	  }
+	  HAL_UART_Receive_IT(&huart1, &rx_data, 1);
+  }
+  /* NOTE: This function should not be modified, when the callback is needed,
+           the HAL_UART_RxCpltCallback could be implemented in the user file
+   */
+}
 
 /* USER CODE END 0 */
 
@@ -74,7 +126,6 @@ static void MX_TIM4_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -96,26 +147,23 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
-  MX_ADC1_Init();
-  MX_ADC2_Init();
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-  uint8_t data[12] = "HELLO WORLD";
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+  HAL_UART_Receive_IT(&huart1, &rx_data, 1);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-	 HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, GPIO_PIN_SET);
-	 HAL_UART_Transmit(&huart1, data, 12, 10);
-
-	 HAL_Delay(500);
+	while (1) {
+		main_app.gas_sensor.state = (uint8_t)HAL_GPIO_ReadPin(GAS_DI_GPIO_Port, GAS_DI_Pin);
+		HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin,
+				!main_app.led1_state);
+		HAL_Delay(50);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+	}
   /* USER CODE END 3 */
 }
 
@@ -127,7 +175,6 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
@@ -154,106 +201,6 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
-  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV2;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-  {
-    Error_Handler();
-  }
-}
-
-/**
-  * @brief ADC1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_ADC1_Init(void)
-{
-
-  /* USER CODE BEGIN ADC1_Init 0 */
-
-  /* USER CODE END ADC1_Init 0 */
-
-  ADC_ChannelConfTypeDef sConfig = {0};
-
-  /* USER CODE BEGIN ADC1_Init 1 */
-
-  /* USER CODE END ADC1_Init 1 */
-
-  /** Common config
-  */
-  hadc1.Instance = ADC1;
-  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
-  hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 1;
-  if (HAL_ADC_Init(&hadc1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /** Configure Regular Channel
-  */
-  sConfig.Channel = ADC_CHANNEL_7;
-  sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN ADC1_Init 2 */
-
-  /* USER CODE END ADC1_Init 2 */
-
-}
-
-/**
-  * @brief ADC2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_ADC2_Init(void)
-{
-
-  /* USER CODE BEGIN ADC2_Init 0 */
-
-  /* USER CODE END ADC2_Init 0 */
-
-  ADC_ChannelConfTypeDef sConfig = {0};
-
-  /* USER CODE BEGIN ADC2_Init 1 */
-
-  /* USER CODE END ADC2_Init 1 */
-
-  /** Common config
-  */
-  hadc2.Instance = ADC2;
-  hadc2.Init.ScanConvMode = ADC_SCAN_DISABLE;
-  hadc2.Init.ContinuousConvMode = DISABLE;
-  hadc2.Init.DiscontinuousConvMode = DISABLE;
-  hadc2.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-  hadc2.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc2.Init.NbrOfConversion = 1;
-  if (HAL_ADC_Init(&hadc2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /** Configure Regular Channel
-  */
-  sConfig.Channel = ADC_CHANNEL_8;
-  sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
-  if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN ADC2_Init 2 */
-
-  /* USER CODE END ADC2_Init 2 */
-
 }
 
 /**
@@ -362,15 +309,26 @@ static void MX_GPIO_Init(void)
 /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin
-                          |LED5_Pin|LED6_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(FAN_CTRL_GPIO_Port, FAN_CTRL_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin
+                          |LED5_Pin|LED6_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, HORN_Pin|LEDRED_Pin|FAN_CTRL_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin : LED_BLUE_Pin */
+  GPIO_InitStruct.Pin = LED_BLUE_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LED_BLUE_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED1_Pin LED2_Pin LED3_Pin LED4_Pin
                            LED5_Pin LED6_Pin */
@@ -381,31 +339,97 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : GAS_DI_Pin RAIN_DI_Pin */
-  GPIO_InitStruct.Pin = GAS_DI_Pin|RAIN_DI_Pin;
+  /*Configure GPIO pins : GAS_DI_Pin RAIN_DI_Pin PIR_DI_Pin */
+  GPIO_InitStruct.Pin = GAS_DI_Pin|RAIN_DI_Pin|PIR_DI_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PIR_IN_Pin */
-  GPIO_InitStruct.Pin = PIR_IN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(PIR_IN_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : FAN_CTRL_Pin */
-  GPIO_InitStruct.Pin = FAN_CTRL_Pin;
+  /*Configure GPIO pins : HORN_Pin LEDRED_Pin FAN_CTRL_Pin */
+  GPIO_InitStruct.Pin = HORN_Pin|LEDRED_Pin|FAN_CTRL_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(FAN_CTRL_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
+void process_rx_data(){
+	MSG_TYPE msg_type;
+	cJSON* root = cJSON_Parse((char*)uart_rx_buff);
+	cJSON* msg_id = cJSON_GetObjectItem(root, "msg_id");
+	cJSON* state;
+	msg_type = (MSG_TYPE)cJSON_GetNumberValue(msg_id);
+	switch(msg_type){
+		case MSG_LED_1:
+			state = cJSON_GetObjectItem(root, "LED1");
+			main_app.led1_state = cJSON_GetNumberValue(state);
+			break;
+		case MSG_LED_2:
+			state = cJSON_GetObjectItem(root, "LED2");
+			main_app.led2_state = cJSON_GetNumberValue(state);
+			break;
+		case MSG_LED_3:
+			state = cJSON_GetObjectItem(root, "LED3");
+			main_app.led3_state = cJSON_GetNumberValue(state);
+			break;
+		case MSG_LED_4:
+			state = cJSON_GetObjectItem(root, "LED4");
+			main_app.led4_state = cJSON_GetNumberValue(state);
+			break;
+		case MSG_LED_5:
+			state = cJSON_GetObjectItem(root, "LED5");
+			main_app.led5_state = cJSON_GetNumberValue(state);
+			break;
+		case MSG_LED_6:
+			state = cJSON_GetObjectItem(root, "LED6");
+			main_app.led6_state = cJSON_GetNumberValue(state);
+			break;
+		case MSG_MOTOR_1:
+			state = cJSON_GetObjectItem(root, "MOTOR1");
+			main_app.motor1_state = cJSON_GetNumberValue(state);
+			break;
+		case MSG_MOTOR_2:
+			state = cJSON_GetObjectItem(root, "MOTOR2");
+			main_app.motor2_state = cJSON_GetNumberValue(state);
+			break;
+		case MSG_MOTOR_3:
+			state = cJSON_GetObjectItem(root, "MOTOR3");
+			main_app.motor3_state = cJSON_GetNumberValue(state);
+			break;
+		case MSG_MOTOR_4:
+			state = cJSON_GetObjectItem(root, "MOTOR4");
+			main_app.motor4_state = cJSON_GetNumberValue(state);
+			break;
+		case MSG_MOTOR_5:
+			state = cJSON_GetObjectItem(root, "MOTOR5");
+			main_app.motor5_state = cJSON_GetNumberValue(state);
+			break;
+	}
+	cJSON_Delete(root);
 
+}
+
+
+void process_control(){
+	process_led_control();
+}
+
+void process_led_control(){
+	HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, main_app.led1_state);
+	HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, main_app.led2_state);
+	HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, main_app.led3_state);
+	HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, main_app.led4_state);
+	HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, main_app.led5_state);
+	HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, main_app.led6_state);
+}
+
+void process_measure(){
+
+}
 /* USER CODE END 4 */
 
 /**
