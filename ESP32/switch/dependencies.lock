@@ -34,7 +34,7 @@ dependencies:
     source:
       path: C:\esp-rainmaker\components\esp_schedule
       type: local
-    version: 1.0.0
+    version: 1.0.1
   espressif/esp_secure_cert_mgr:
     component_hash: 4a9586b0804c6853a4b59e26b5f23e38126d4838156ca2c14087cc4a6d232b35
     source:
@@ -68,7 +68,7 @@ dependencies:
   espressif/rmaker_common:
     component_hash: null
     source:
-      path: C:\esp-rainmaker\components\esp-insights\components\rmaker_common
+      path: C:\esp-rainmaker\components\rmaker_common
       type: local
     version: 1.4.3
   idf:
@@ -76,6 +76,6 @@ dependencies:
     source:
       type: idf
     version: 5.0.4
-manifest_hash: 364ebefbab3057c3b231a2059725b7686eb6c4b992b77130b27bd543f7a1e5f4
+manifest_hash: c9df4d07e54717ede9975746025016931aabecb8e3dc29bd9d995b92f5bfd100
 target: esp32
 version: 1.0.0
