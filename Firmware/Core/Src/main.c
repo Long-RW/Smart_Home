@@ -26,7 +26,6 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -46,14 +45,14 @@ enum MSG_TYPE_t{
 	MSG_MOTOR_5
 };
 
-typedef struct GAS_SENSOR_t GAS_SENSOR;
-struct GAS_SENSOR_t{
-	float voltage;
+typedef struct SENSOR_t SENSOR;
+struct SENSOR_t{
 	uint8_t state;
 };
 typedef struct SMH_APP_t SMH_APP;
 struct SMH_APP_t{
-	GAS_SENSOR gas_sensor;
+	SENSOR gas_sensor;
+	SENSOR rain_sensor;
 	uint8_t led1_state;
 	uint8_t led2_state;
 	uint8_t led3_state;
@@ -65,6 +64,8 @@ struct SMH_APP_t{
 	uint8_t motor3_state;
 	uint8_t motor4_state;
 	uint8_t motor5_state;
+	uint8_t horn_state;
+	uint8_t ledred_state;
 };
 /* USER CODE END PD */
 
@@ -97,6 +98,7 @@ void process_led_control();
 void process_motor_control();
 void process_measure();
 void process_control();
+void set_motor_radian(uint8_t motor_number, uint8_t radian);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -116,6 +118,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
            the HAL_UART_RxCpltCallback could be implemented in the user file
    */
 }
+
 
 /* USER CODE END 0 */
 
@@ -149,21 +152,29 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
+  main_app.horn_state = 0;
+  main_app.ledred_state = 0;
   HAL_UART_Receive_IT(&huart1, &rx_data, 1);
-
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	while (1) {
-		main_app.gas_sensor.state = (uint8_t)HAL_GPIO_ReadPin(GAS_DI_GPIO_Port, GAS_DI_Pin);
-		HAL_GPIO_WritePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin,
-				!main_app.led1_state);
-		HAL_Delay(50);
+  while (1) {
+	  if(tx_complete_flag == 1){
+		  process_rx_data();
+		  tx_complete_flag = 0;
+	  }
+	  process_measure();
+	  process_control();
+	  HAL_Delay(100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	}
+  }
   /* USER CODE END 3 */
 }
 
@@ -215,6 +226,7 @@ static void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 0 */
 
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
   TIM_OC_InitTypeDef sConfigOC = {0};
 
@@ -222,11 +234,20 @@ static void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 1 */
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 0;
+  htim4.Init.Prescaler = 999;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 65535;
+  htim4.Init.Period = 159;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
   if (HAL_TIM_PWM_Init(&htim4) != HAL_OK)
   {
     Error_Handler();
@@ -415,7 +436,22 @@ void process_rx_data(){
 
 
 void process_control(){
+
+	HAL_GPIO_WritePin(FAN_CTRL_GPIO_Port, FAN_CTRL_Pin, main_app.motor5_state);
+	if(main_app.gas_sensor.state == 1){
+		HAL_GPIO_WritePin(LEDRED_GPIO_Port, LEDRED_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(HORN_GPIO_Port, HORN_Pin, GPIO_PIN_RESET);
+		main_app.ledred_state = 1;
+		main_app.horn_state = 1;
+	}
+	else{
+		HAL_GPIO_WritePin(LEDRED_GPIO_Port, LEDRED_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(HORN_GPIO_Port, HORN_Pin, GPIO_PIN_SET);
+		main_app.ledred_state = 0;
+		main_app.horn_state = 0;
+	}
 	process_led_control();
+	process_motor_control();
 }
 
 void process_led_control(){
@@ -425,10 +461,79 @@ void process_led_control(){
 	HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, main_app.led4_state);
 	HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, main_app.led5_state);
 	HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, main_app.led6_state);
+	HAL_GPIO_WritePin(LEDRED_GPIO_Port, LEDRED_Pin, main_app.ledred_state);
 }
 
-void process_measure(){
+void process_motor_control(){
+	if(main_app.motor1_state == 1){
+		set_motor_radian(1, 180);
+	}
+	else{
+		set_motor_radian(1, 0);
+	}
 
+	if(main_app.motor2_state == 1){
+		set_motor_radian(2, 180);
+	}
+	else{
+		set_motor_radian(2, 0);
+	}
+
+	if(main_app.motor4_state == 1){
+		set_motor_radian(4, 180);
+	}
+	else{
+		set_motor_radian(4, 0);
+	}
+
+	if(main_app.rain_sensor.state == 1){
+		set_motor_radian(3, 180);
+	}
+	else{
+		set_motor_radian(3, 0);
+	}
+
+}
+void process_measure(){
+	main_app.gas_sensor.state = !(uint8_t)HAL_GPIO_ReadPin(GAS_DI_GPIO_Port, GAS_DI_Pin);
+	main_app.rain_sensor.state = !(uint8_t)HAL_GPIO_ReadPin(RAIN_DI_GPIO_Port, RAIN_DI_Pin);
+}
+
+void set_motor_radian(uint8_t motor_number, uint8_t radian){
+	switch(motor_number){
+		case 1:
+			if(radian == 0){
+				__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 5);
+			}
+			else if(radian == 180){
+				__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 20);
+			}
+			break;
+		case 2:
+			if(radian == 0){
+				__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 5);
+			}
+			else if(radian == 180){
+				__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 20);
+			}
+			break;
+		case 3:
+			if(radian == 0){
+				__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, 5);
+			}
+			else if(radian == 180){
+				__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, 20);
+			}
+			break;
+		case 4:
+			if(radian == 0){
+				__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, 5);
+			}
+			else if(radian == 180){
+				__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, 20);
+			}
+			break;
+	}
 }
 /* USER CODE END 4 */
 
