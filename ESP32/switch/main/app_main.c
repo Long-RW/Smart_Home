@@ -60,13 +60,24 @@ esp_rmaker_device_t *led2_switch;
 esp_rmaker_device_t *led3_switch;
 esp_rmaker_device_t *led4_switch;
 esp_rmaker_device_t *led5_switch;
-esp_rmaker_device_t *led6_switch;
 esp_rmaker_device_t *motor1_switch;
 esp_rmaker_device_t *motor2_switch;
 esp_rmaker_device_t *motor3_switch;
-esp_rmaker_device_t *motor4_switch;
 esp_rmaker_device_t *motor5_switch;
-/* Callback to handle commands received from the RainMaker cloud */
+/* Callback to handle commands received from the RainMaker cloud 
+    led1_switch = esp_rmaker_switch_device_create("Den Phong Khach", NULL, false);
+    led2_switch = esp_rmaker_switch_device_create("Den Phong Ngu 1", NULL, false);
+    led3_switch = esp_rmaker_switch_device_create("Den Phong Ngu 2", NULL, false);
+    led4_switch = esp_rmaker_switch_device_create("Den Gara", NULL, false);
+    led5_switch = esp_rmaker_switch_device_create("Den Bep", NULL, false);
+    led6_switch = esp_rmaker_switch_device_create("Den Nha Tam", NULL, false);
+
+    motor1_switch = esp_rmaker_switch_device_create("Cua so Khach", NULL, false);
+    motor2_switch = esp_rmaker_switch_device_create("Cua Gara", NULL, false);
+    motor3_switch = esp_rmaker_switch_device_create("Cua so Bep", NULL, false);
+    motor4_switch = esp_rmaker_switch_device_create("MOTOR4", NULL, false);
+    motor5_switch = esp_rmaker_switch_device_create("Quat Phong Ngu", NULL, false);
+*/
 static esp_err_t write_cb(const esp_rmaker_device_t *device, const esp_rmaker_param_t *param,
             const esp_rmaker_param_val_t val, void *priv_data, esp_rmaker_write_ctx_t *ctx)
 {   
@@ -74,7 +85,7 @@ static esp_err_t write_cb(const esp_rmaker_device_t *device, const esp_rmaker_pa
     if (ctx) {
         ESP_LOGI(TAG, "Received write request via : %s", esp_rmaker_device_cb_src_to_str(ctx->src));
     }
-    if (strcmp(device_name, "LED1") == 0){
+    if (strcmp(device_name, "Den Phong Khach") == 0){
         if (strcmp(esp_rmaker_param_get_name(param), ESP_RMAKER_DEF_POWER_NAME) == 0)
         {
             ESP_LOGI(TAG, "Received value = %s for %s - %s",
@@ -94,7 +105,7 @@ static esp_err_t write_cb(const esp_rmaker_device_t *device, const esp_rmaker_pa
             }
         }
     }
-    if (strcmp(device_name, "LED2") == 0){
+    if (strcmp(device_name, "Den Phong Ngu 1") == 0){
         if (strcmp(esp_rmaker_param_get_name(param), ESP_RMAKER_DEF_POWER_NAME) == 0)
         {
             ESP_LOGI(TAG, "Received value = %s for %s - %s",
@@ -114,7 +125,7 @@ static esp_err_t write_cb(const esp_rmaker_device_t *device, const esp_rmaker_pa
             }
         }
     }
-    if (strcmp(device_name, "LED3") == 0){
+    if (strcmp(device_name, "Den Phong Ngu 2") == 0){
         if (strcmp(esp_rmaker_param_get_name(param), ESP_RMAKER_DEF_POWER_NAME) == 0)
         {
             ESP_LOGI(TAG, "Received value = %s for %s - %s",
@@ -134,7 +145,7 @@ static esp_err_t write_cb(const esp_rmaker_device_t *device, const esp_rmaker_pa
             }
         }
     }
-    if (strcmp(device_name, "LED4") == 0){
+    if (strcmp(device_name, "Den Gara") == 0){
         if (strcmp(esp_rmaker_param_get_name(param), ESP_RMAKER_DEF_POWER_NAME) == 0)
         {
             ESP_LOGI(TAG, "Received value = %s for %s - %s",
@@ -154,7 +165,7 @@ static esp_err_t write_cb(const esp_rmaker_device_t *device, const esp_rmaker_pa
             }
         }
     }
-    if (strcmp(device_name, "LED5") == 0){
+    if (strcmp(device_name, "Den Bep") == 0){
         if (strcmp(esp_rmaker_param_get_name(param), ESP_RMAKER_DEF_POWER_NAME) == 0)
         {
             ESP_LOGI(TAG, "Received value = %s for %s - %s",
@@ -174,27 +185,7 @@ static esp_err_t write_cb(const esp_rmaker_device_t *device, const esp_rmaker_pa
             }
         }
     }
-    if (strcmp(device_name, "LED6") == 0){
-        if (strcmp(esp_rmaker_param_get_name(param), ESP_RMAKER_DEF_POWER_NAME) == 0)
-        {
-            ESP_LOGI(TAG, "Received value = %s for %s - %s",
-                     val.val.b ? "true" : "false", esp_rmaker_device_get_name(device),
-                     esp_rmaker_param_get_name(param));
-            app_driver_set_state(val.val.b);
-            esp_rmaker_param_update_and_report(param, val);
-            bool switch_state = val.val.b;
-            char tx_data[30] = {0}; 
-            if(switch_state == true){
-                strcpy(tx_data, "{\"msg_id\":6,\"LED6\":1}");
-                uart_write_bytes(UART1, tx_data, strlen(tx_data));
-            }
-            else{
-                strcpy(tx_data, "{\"msg_id\":6,\"LED6\":0}");
-                uart_write_bytes(UART1, tx_data, strlen(tx_data));
-            }
-        }
-    }
-    if (strcmp(device_name, "MOTOR1") == 0){
+    if (strcmp(device_name, "Cua so Khach") == 0){
         if (strcmp(esp_rmaker_param_get_name(param), ESP_RMAKER_DEF_POWER_NAME) == 0)
         {
             ESP_LOGI(TAG, "Received value = %s for %s - %s",
@@ -215,7 +206,7 @@ static esp_err_t write_cb(const esp_rmaker_device_t *device, const esp_rmaker_pa
         }
     }
 
-    if (strcmp(device_name, "MOTOR2") == 0){
+    if (strcmp(device_name, "Cua Gara") == 0){
         if (strcmp(esp_rmaker_param_get_name(param), ESP_RMAKER_DEF_POWER_NAME) == 0)
         {
             ESP_LOGI(TAG, "Received value = %s for %s - %s",
@@ -236,7 +227,7 @@ static esp_err_t write_cb(const esp_rmaker_device_t *device, const esp_rmaker_pa
         }
     }
 
-    if (strcmp(device_name, "MOTOR3") == 0){
+    if (strcmp(device_name, "Cua so Bep") == 0){
         if (strcmp(esp_rmaker_param_get_name(param), ESP_RMAKER_DEF_POWER_NAME) == 0)
         {
             ESP_LOGI(TAG, "Received value = %s for %s - %s",
@@ -257,28 +248,8 @@ static esp_err_t write_cb(const esp_rmaker_device_t *device, const esp_rmaker_pa
         }
     }
 
-    if (strcmp(device_name, "MOTOR4") == 0){
-        if (strcmp(esp_rmaker_param_get_name(param), ESP_RMAKER_DEF_POWER_NAME) == 0)
-        {
-            ESP_LOGI(TAG, "Received value = %s for %s - %s",
-                     val.val.b ? "true" : "false", esp_rmaker_device_get_name(device),
-                     esp_rmaker_param_get_name(param));
-            app_driver_set_state(val.val.b);
-            esp_rmaker_param_update_and_report(param, val);
-            bool switch_state = val.val.b;
-            char tx_data[30] = {0};  
-            if(switch_state == true){
-                strcpy(tx_data, "{\"msg_id\":10,\"MOTOR4\":1}");
-                uart_write_bytes(UART1, tx_data, strlen(tx_data));
-            }
-            else{
-                strcpy(tx_data, "{\"msg_id\":10,\"MOTOR4\":0}");
-                uart_write_bytes(UART1, tx_data, strlen(tx_data));
-            }
-        }
-    }
 
-    if (strcmp(device_name, "MOTOR5") == 0){
+    if (strcmp(device_name, "Quat Phong Ngu") == 0){
         if (strcmp(esp_rmaker_param_get_name(param), ESP_RMAKER_DEF_POWER_NAME) == 0)
         {
             ESP_LOGI(TAG, "Received value = %s for %s - %s",
@@ -433,7 +404,7 @@ void app_main()
     esp_rmaker_config_t rainmaker_cfg = {
         .enable_time_sync = false,
     };
-    esp_rmaker_node_t *node = esp_rmaker_node_init(&rainmaker_cfg, "ESP RainMaker Device", "Switch");
+    esp_rmaker_node_t *node = esp_rmaker_node_init(&rainmaker_cfg, "MySmartHome", "Switch");
     if (!node) {
         ESP_LOGE(TAG, "Could not initialise node. Aborting!!!");
         vTaskDelay(5000/portTICK_PERIOD_MS);
@@ -445,18 +416,16 @@ void app_main()
      * avoid writing code for adding the name and power parameters.
      */
     switch_device = esp_rmaker_device_create("Switch", ESP_RMAKER_DEVICE_SWITCH, NULL);
-    led1_switch = esp_rmaker_switch_device_create("LED1", NULL, true);
-    led2_switch = esp_rmaker_switch_device_create("LED2", NULL, true);
-    led3_switch = esp_rmaker_switch_device_create("LED3", NULL, true);
-    led4_switch = esp_rmaker_switch_device_create("LED4", NULL, true);
-    led5_switch = esp_rmaker_switch_device_create("LED5", NULL, true);
-    led6_switch = esp_rmaker_switch_device_create("LED6", NULL, true);
+    led1_switch = esp_rmaker_switch_device_create("Den Phong Khach", NULL, false);
+    led2_switch = esp_rmaker_switch_device_create("Den Phong Ngu 1", NULL, false);
+    led3_switch = esp_rmaker_switch_device_create("Den Phong Ngu 2", NULL, false);
+    led4_switch = esp_rmaker_switch_device_create("Den Gara", NULL, false);
+    led5_switch = esp_rmaker_switch_device_create("Den Bep", NULL, false);
 
-    motor1_switch = esp_rmaker_switch_device_create("MOTOR1", NULL, true);
-    motor2_switch = esp_rmaker_switch_device_create("MOTOR2", NULL, true);
-    motor3_switch = esp_rmaker_switch_device_create("MOTOR3", NULL, true);
-    motor4_switch = esp_rmaker_switch_device_create("MOTOR4", NULL, true);
-    motor5_switch = esp_rmaker_switch_device_create("MOTOR5", NULL, true);
+    motor1_switch = esp_rmaker_switch_device_create("Cua so Khach", NULL, false);
+    motor2_switch = esp_rmaker_switch_device_create("Cua Gara", NULL, false);
+    motor3_switch = esp_rmaker_switch_device_create("Cua so Bep", NULL, false);
+    motor5_switch = esp_rmaker_switch_device_create("Quat Phong Ngu", NULL, false);
     /* Add the write callback for the device. We aren't registering any read callback yet as
      * it is for future use.
      */
@@ -466,12 +435,10 @@ void app_main()
     esp_rmaker_device_add_cb(led3_switch, write_cb, NULL);
     esp_rmaker_device_add_cb(led4_switch, write_cb, NULL);
     esp_rmaker_device_add_cb(led5_switch, write_cb, NULL);
-    esp_rmaker_device_add_cb(led6_switch, write_cb, NULL);
 
     esp_rmaker_device_add_cb(motor1_switch, write_cb, NULL);
     esp_rmaker_device_add_cb(motor2_switch, write_cb, NULL);
     esp_rmaker_device_add_cb(motor3_switch, write_cb, NULL);
-    esp_rmaker_device_add_cb(motor4_switch, write_cb, NULL);
     esp_rmaker_device_add_cb(motor5_switch, write_cb, NULL);
     /* Add the standard name parameter (type: esp.param.name), which allows setting a persistent,
      * user friendly custom name from the phone apps. All devices are recommended to have this
@@ -497,12 +464,10 @@ void app_main()
     esp_rmaker_node_add_device(node, led3_switch);
     esp_rmaker_node_add_device(node, led4_switch);
     esp_rmaker_node_add_device(node, led5_switch);
-    esp_rmaker_node_add_device(node, led6_switch);
 
     esp_rmaker_node_add_device(node, motor1_switch);
     esp_rmaker_node_add_device(node, motor2_switch);
     esp_rmaker_node_add_device(node, motor3_switch);
-    esp_rmaker_node_add_device(node, motor4_switch);
     esp_rmaker_node_add_device(node, motor5_switch);
     /* Enable OTA */
     esp_rmaker_ota_enable_default();
