@@ -437,19 +437,8 @@ void process_rx_data(){
 
 void process_control(){
 
-	HAL_GPIO_WritePin(FAN_CTRL_GPIO_Port, FAN_CTRL_Pin, main_app.motor5_state);
-	if(main_app.gas_sensor.state == 1){
-		HAL_GPIO_WritePin(LEDRED_GPIO_Port, LEDRED_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(HORN_GPIO_Port, HORN_Pin, GPIO_PIN_RESET);
-		main_app.ledred_state = 1;
-		main_app.horn_state = 1;
-	}
-	else{
-		HAL_GPIO_WritePin(LEDRED_GPIO_Port, LEDRED_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(HORN_GPIO_Port, HORN_Pin, GPIO_PIN_SET);
-		main_app.ledred_state = 0;
-		main_app.horn_state = 0;
-	}
+	HAL_GPIO_WritePin(HORN_GPIO_Port, HORN_Pin, main_app.motor5_state);
+	HAL_GPIO_WritePin(FAN_CTRL_GPIO_Port, FAN_CTRL_Pin, main_app.gas_sensor.state);
 	process_led_control();
 	process_motor_control();
 }
@@ -461,7 +450,6 @@ void process_led_control(){
 	HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, main_app.led4_state);
 	HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, main_app.led5_state);
 	HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, main_app.led6_state);
-	HAL_GPIO_WritePin(LEDRED_GPIO_Port, LEDRED_Pin, main_app.ledred_state);
 }
 
 void process_motor_control(){
@@ -479,18 +467,11 @@ void process_motor_control(){
 		set_motor_radian(2, 0);
 	}
 
-	if(main_app.motor4_state == 1){
-		set_motor_radian(4, 180);
-	}
-	else{
-		set_motor_radian(4, 0);
-	}
-
-	if(main_app.rain_sensor.state == 1){
-		set_motor_radian(3, 180);
-	}
-	else{
+	if(main_app.motor3_state == 1){
 		set_motor_radian(3, 0);
+	}
+	else{
+		set_motor_radian(3, 180);
 	}
 
 }
@@ -525,13 +506,7 @@ void set_motor_radian(uint8_t motor_number, uint8_t radian){
 				__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, 20);
 			}
 			break;
-		case 4:
-			if(radian == 0){
-				__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, 5);
-			}
-			else if(radian == 180){
-				__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, 20);
-			}
+		default:
 			break;
 	}
 }

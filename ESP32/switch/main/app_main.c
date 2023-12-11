@@ -60,6 +60,8 @@ esp_rmaker_device_t *led2_switch;
 esp_rmaker_device_t *led3_switch;
 esp_rmaker_device_t *led4_switch;
 esp_rmaker_device_t *led5_switch;
+esp_rmaker_device_t *led6_swtich;
+
 esp_rmaker_device_t *motor1_switch;
 esp_rmaker_device_t *motor2_switch;
 esp_rmaker_device_t *motor3_switch;
@@ -185,7 +187,29 @@ static esp_err_t write_cb(const esp_rmaker_device_t *device, const esp_rmaker_pa
             }
         }
     }
-    if (strcmp(device_name, "Cua so Khach") == 0){
+    
+    if (strcmp(device_name, "Den Nha VS") == 0){
+        if (strcmp(esp_rmaker_param_get_name(param), ESP_RMAKER_DEF_POWER_NAME) == 0)
+        {
+            ESP_LOGI(TAG, "Received value = %s for %s - %s",
+                        val.val.b ? "true" : "false", esp_rmaker_device_get_name(device),
+                        esp_rmaker_param_get_name(param));
+            app_driver_set_state(val.val.b);
+            esp_rmaker_param_update_and_report(param, val);
+            bool switch_state = val.val.b;
+            char tx_data[30] = {0}; 
+            if(switch_state == true){
+                strcpy(tx_data, "{\"msg_id\":6,\"LED6\":1}");
+                uart_write_bytes(UART1, tx_data, strlen(tx_data));
+            }
+            else{
+                strcpy(tx_data, "{\"msg_id\":6,\"LED6\":0}");
+                uart_write_bytes(UART1, tx_data, strlen(tx_data));
+            }
+        }
+    }
+
+    if (strcmp(device_name, "Cua so Phong Ngu") == 0){
         if (strcmp(esp_rmaker_param_get_name(param), ESP_RMAKER_DEF_POWER_NAME) == 0)
         {
             ESP_LOGI(TAG, "Received value = %s for %s - %s",
@@ -421,8 +445,9 @@ void app_main()
     led3_switch = esp_rmaker_switch_device_create("Den Phong Ngu 2", NULL, false);
     led4_switch = esp_rmaker_switch_device_create("Den Gara", NULL, false);
     led5_switch = esp_rmaker_switch_device_create("Den Bep", NULL, false);
+    led6_swtich = esp_rmaker_switch_device_create("Den Nha VS", NULL, false);
 
-    motor1_switch = esp_rmaker_switch_device_create("Cua so Khach", NULL, false);
+    motor1_switch = esp_rmaker_switch_device_create("Cua so Phong Ngu", NULL, false);
     motor2_switch = esp_rmaker_switch_device_create("Cua Gara", NULL, false);
     motor3_switch = esp_rmaker_switch_device_create("Cua so Bep", NULL, false);
     motor5_switch = esp_rmaker_switch_device_create("Quat Phong Ngu", NULL, false);
@@ -435,7 +460,7 @@ void app_main()
     esp_rmaker_device_add_cb(led3_switch, write_cb, NULL);
     esp_rmaker_device_add_cb(led4_switch, write_cb, NULL);
     esp_rmaker_device_add_cb(led5_switch, write_cb, NULL);
-
+    esp_rmaker_device_add_cb(led6_switch, write_cb, NULL);
     esp_rmaker_device_add_cb(motor1_switch, write_cb, NULL);
     esp_rmaker_device_add_cb(motor2_switch, write_cb, NULL);
     esp_rmaker_device_add_cb(motor3_switch, write_cb, NULL);
@@ -464,6 +489,7 @@ void app_main()
     esp_rmaker_node_add_device(node, led3_switch);
     esp_rmaker_node_add_device(node, led4_switch);
     esp_rmaker_node_add_device(node, led5_switch);
+    esp_rmaker_node_add_device(node, led6_switch);
 
     esp_rmaker_node_add_device(node, motor1_switch);
     esp_rmaker_node_add_device(node, motor2_switch);

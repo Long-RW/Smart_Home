@@ -5,9 +5,9 @@
 ../Core/Src/main.c:293:13:MX_USART1_UART_Init	2
 ../Core/Src/main.c:326:13:MX_GPIO_Init	1
 ../Core/Src/main.c:381:6:process_rx_data	12
-../Core/Src/main.c:438:6:process_control	2
-../Core/Src/main.c:457:6:process_led_control	1
-../Core/Src/main.c:467:6:process_motor_control	5
-../Core/Src/main.c:497:6:process_measure	1
-../Core/Src/main.c:502:6:set_motor_radian	13
-../Core/Src/main.c:544:6:Error_Handler	1
+../Core/Src/main.c:438:6:process_control	1
+../Core/Src/main.c:446:6:process_led_control	1
+../Core/Src/main.c:455:6:process_motor_control	4
+../Core/Src/main.c:478:6:process_measure	1
+../Core/Src/main.c:483:6:set_motor_radian	11
+../Core/Src/main.c:519:6:Error_Handler	1
